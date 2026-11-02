@@ -403,7 +403,9 @@ function drawPending(){
     var card=document.createElement('div');card.className='item';card.style.gap='12px';
     var head=document.createElement('div');head.className='row';head.style.justifyContent='space-between';
     var t=document.createElement('div');t.innerHTML='<span class="lbl" style="font-size:16px"></span> <span class="muted"></span>';
-    t.firstChild.textContent=g;t.lastChild.textContent=items.length+' طلب';
+    var ph=phoneBy[nmKey(g)]||'';
+    t.firstChild.textContent=g;t.lastChild.textContent=items.length+' طلب'+(ph?'':' — بلا رقم');
+    if(ph){var pl=document.createElement('a');pl.href='tel:'+ph;pl.textContent='📞 '+ph;pl.style.cssText='margin-inline-start:8px;font-weight:800;color:#3d472b;text-decoration:none';t.appendChild(pl);var wl=document.createElement('a');wl.href='https://wa.me/964'+ph.replace(/^0/,'');wl.target='_blank';wl.textContent='واتساب';wl.style.cssText='margin-inline-start:8px;font-weight:800;color:#8c491a';t.appendChild(wl)}
     head.appendChild(t);
     var acts=document.createElement('div');acts.className='row';
     var all=document.createElement('button');all.className='ok';all.textContent='اعتماد الكل';
@@ -560,6 +562,8 @@ $('plSend').onclick=function(){
   });
 };
 var PRIV='https://baytalqasid.app.n8n.cloud/webhook/family-tree-private';
+var phoneBy={};
+function nmKey(s){return String(s||'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/\s+/g,' ').trim()}
 function loadPrivate(){
   var box=$('privList');if(!box)return;
   box.innerHTML='<p class="muted">جارٍ التحميل…</p>';
@@ -567,6 +571,8 @@ function loadPrivate(){
    .then(function(r){return r.json()}).then(function(j){
      box.innerHTML='';
      var list=(j&&j.contacts)||[];
+     phoneBy={};list.forEach(function(c){if(c.by&&c.phone)phoneBy[nmKey(c.by)]=c.phone});
+     if(pending.length)drawPending();
      $('privStatus').textContent=list.length?list.length+' رقم':'لا أرقام';
      if(!list.length){box.innerHTML='<p class="muted">لم يُرسل أحد رقمه بعد.</p>';return}
      list.slice().reverse().forEach(function(c){
