@@ -126,6 +126,7 @@
   <div class="panel">
     <div class="row" style="justify-content:space-between">
       <h2>طلبات العائلة</h2>
+      <label class="row" style="gap:6px;font-size:14px"><input id="notifyWa" type="checkbox" checked style="min-width:0;width:20px;height:20px"> إبلاغ المرسل عبر واتساب بعد التنفيذ</label>
       <label class="row" style="gap:6px;font-size:14px"><input id="annNames" type="checkbox" checked style="min-width:0;width:20px;height:20px"> أعلن الأسماء الجديدة في المجموعة</label>
       <span id="pStatus" class="muted"></span>
     </div>
@@ -445,8 +446,9 @@ function drawPending(){
       var who=document.createElement('span');who.className='who';who.textContent=String(it.at||'').slice(0,16).replace('T',' ');r2.appendChild(who);
       var one=document.createElement('button');one.textContent=it.type==='correction'?'إضافة هذا فقط':'نشر هذا فقط';one.style.cssText='min-height:34px;padding:5px 13px;font-size:13px';
       one.onclick=function(){
-        if(it.type==='correction'){var ks2=kidsOf(it);edit({action:'addMany',items:[{path:it.path,kids:ks2}]},'أُضيف').then(function(ok){if(ok)decide(it,'reject','أُضيف وأُزيل من الطلبات')})}
-        else decide(it,'approve','تم النشر');
+        var w=(ph&&$('notifyWa')&&$('notifyWa').checked)?window.open('','_blank'):null;
+        if(it.type==='correction'){var ks2=kidsOf(it);edit({action:'addMany',items:[{path:it.path,kids:ks2}]},'أُضيف').then(function(ok){if(ok){decide(it,'reject','أُضيف وأُزيل من الطلبات');if(w)waOpen(w,ph,notifyMsg(g,[it]))}else if(w)w.close()})}
+        else{decide(it,'approve','تم النشر');if(w)waOpen(w,ph,notifyMsg(g,[it]))}
       };
       var no=document.createElement('button');no.className='warn';no.textContent='رفض';no.style.cssText='min-height:34px;padding:5px 13px;font-size:13px';
       no.onclick=function(){decide(it,'reject','تم الرفض')};
@@ -457,9 +459,11 @@ function drawPending(){
       var adds=items.filter(function(x){return x.type==='correction'}).map(function(x){return x.id});
       var pubs=items.filter(function(x){return x.type!=='correction'}).map(function(x){return x.id});
       if(!confirm('اعتماد '+items.length+' طلب من «'+g+'»؟'))return;
+      var w=(ph&&$('notifyWa')&&$('notifyWa').checked)?window.open('','_blank'):null;
       var step=plan.length?edit({action:'addMany',items:plan},'أُضيفت الأسماء'):Promise.resolve(true);
       step.then(function(ok){
-        if(!ok)return;
+        if(!ok){if(w)w.close();return}
+        if(w)waOpen(w,ph,notifyMsg(g,items));
         if(plan.length&&$('annNames')&&$('annNames').checked){
           var lines=[];plan.forEach(function(p){var father=String(p.path).split(' / ').pop();p.kids.forEach(function(k){lines.push('• '+k.name+' بن '+father+(k.kids&&k.kids.length?' — وأبناؤه: '+k.kids.join('، '):''))})});
           if(lines.length)tgCall({action:'post',text:'🌳 أسماء جديدة أُضيفت إلى شجرة العشيرة:\n'+lines.join('\n')+'\n\nhttps://alhamoudi-family.github.io'});
@@ -561,6 +565,19 @@ $('plSend').onclick=function(){
     if(j&&j.ok){$('plQ').value='';$('plO').value=''}
   });
 };
+var SITE='https://alhamoudi-family.github.io/';
+function pid(s){var h=5381;for(var i=0;i<s.length;i++)h=((h*33)^s.charCodeAt(i))>>>0;return 'p'+h.toString(36)}
+function notifyMsg(name,items){
+  var lines=[];
+  items.forEach(function(it){
+    var who=String(it.path).split(' / ').pop();
+    if(it.type==='correction'){kidsOf(it).forEach(function(k){lines.push('• أُضيف '+k.name+' بن '+who+(k.kids.length?' — وأبناؤه: '+k.kids.join('، '):''))})}
+    else if(it.type==='info')lines.push('• حُدّثت معلومات '+who);
+    else lines.push('• تمت مراجعة ملاحظتك على '+who);
+  });
+  return 'السلام عليكم '+name+'\nمعك اكرم علي لازم الفاضل.\nشكرًا لمشاركتك في شجرة عشائر الحمودي، تم تنفيذ طلبك:\n'+lines.join('\n')+'\n\nتفضّل بالدخول والتأكد من التعديل:\n'+SITE+'#'+pid(items[0].path)+'\n\nإذا وجدت أي خطأ أخبرني.';
+}
+function waOpen(w,ph,msg){var d=String(ph).replace(/\D/g,'').replace(/^964/,'').replace(/^0/,'');var url='https://wa.me/964'+d+'?text='+encodeURIComponent(msg);if(w)w.location=url;else window.open(url,'_blank')}
 var PRIV='https://baytalqasid.app.n8n.cloud/webhook/family-tree-private';
 var phoneBy={};
 function nmKey(s){return String(s||'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/\s+/g,' ').trim()}
