@@ -405,7 +405,7 @@ function drawPending(){
     var t=document.createElement('div');t.innerHTML='<span class="lbl" style="font-size:16px"></span> <span class="muted"></span>';
     var ph=phoneBy[nmKey(g)]||'';
     t.firstChild.textContent=g;t.lastChild.textContent=items.length+' طلب'+(ph?'':' — بلا رقم');
-    if(ph){var pl=document.createElement('a');pl.href='tel:'+ph;pl.textContent='📞 '+ph;pl.style.cssText='margin-inline-start:8px;font-weight:800;color:#3d472b;text-decoration:none';t.appendChild(pl);var wl=document.createElement('a');wl.href='https://wa.me/964'+ph.replace(/^0/,'');wl.target='_blank';wl.textContent='واتساب';wl.style.cssText='margin-inline-start:8px;font-weight:800;color:#8c491a';t.appendChild(wl)}
+    if(ph){var pl=document.createElement('a');pl.href='tel:'+ph;pl.textContent='📞 '+ph;pl.style.cssText='margin-inline-start:8px;font-weight:800;color:#3d472b;text-decoration:none';t.appendChild(pl);var wl=document.createElement('button');wl.type='button';wl.className='ok';var inv=tgInvited[String(ph).replace(/\D/g,'')];wl.textContent=inv?'دُعي ✓ — إعادة':'تأكيد ودعوة';wl.style.cssText='margin-inline-start:8px;min-height:34px;padding:5px 13px;font-size:13px';(function(nm,p,b){b.onclick=function(){tgInvite({by:nm,phone:p},b)}})(g,ph,wl);t.appendChild(wl)}
     head.appendChild(t);
     var acts=document.createElement('div');acts.className='row';
     var all=document.createElement('button');all.className='ok';all.textContent='اعتماد الكل';
@@ -587,7 +587,7 @@ function loadPrivate(){
        var links=document.createElement('div');links.className='row';
        links.innerHTML='<a target="_blank" rel="noopener"><button type="button"></button></a><a target="_blank" rel="noopener"><button type="button" class="ok">واتساب</button></a>';
        links.children[0].href='tel:'+tel;links.children[0].firstChild.textContent=c.phone;
-       links.children[1].href='https://wa.me/'+wa;
+       links.children[1].removeAttribute('href');links.children[1].removeAttribute('target');var wb=links.children[1].firstChild;var inv2=tgInvited[String(c.phone).replace(/\D/g,'')];wb.textContent=inv2?'دُعي ✓ — إعادة':'تأكيد ودعوة';wb.onclick=function(ev){ev.preventDefault();tgInvite(c,wb)};
        var del=document.createElement('button');del.className='warn';del.textContent='حذف';
        del.onclick=function(){if(!confirm('حذف رقم '+(c.by||'')+'؟'))return;fetch(PRIV,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:K(),action:'delete',id:c.id})}).then(loadPrivate)};
        var inv=document.createElement('button');inv.type='button';inv.className='ok';
