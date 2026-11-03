@@ -124,6 +124,8 @@ function render(){
   if(svc){svcPage();var f0=el('div','foot');f0.appendChild(el('div','muted','إعداد الشجرة: علي لازم صخي'));app.appendChild(f0);return}
   if(r===ROOT)home();else person(r);
   var f=el('div','foot');
+  var mpl=el('a',null,'عرض في الخريطة التفاعلية');mpl.href='map.html#'+encodeURIComponent(r.path);
+  f.appendChild(mpl);
   var full=el('a',null,'عرض الشجرة كاملة (للحاسوب)');full.href='full.html#'+encodeURIComponent(r.path);
   f.appendChild(full);
   f.appendChild(el('div','muted','إعداد الشجرة: علي لازم صخي'));
@@ -145,6 +147,10 @@ function home(){
     if(a.map){var m=el('a','chip','فتح الموقع على الخريطة');m.href=a.map;m.target='_blank';m.rel='noopener';m.style.alignSelf='flex-start';al.appendChild(m)}
     app.appendChild(al);
   });
+
+  var mp=el('a','btn','');mp.href='map.html';mp.style.cssText='background:#7a8a5e;border-color:#5f6d47;color:#f5f8ee;text-decoration:none;justify-content:center';
+  mp.appendChild(el('span',null,'تصفّح الشجرة'));var ms=el('small',null,'خريطة تفاعلية • صلة القرابة • المروحة');ms.style.color='#f5f8ee';mp.appendChild(ms);
+  app.appendChild(mp);
 
   var sb=el('div','box white');
   sb.appendChild(el('label',null,'ابحث عن اسمك'));
