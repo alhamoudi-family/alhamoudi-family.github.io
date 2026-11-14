@@ -597,7 +597,7 @@ function loadPrivate(){
        d.style.cssText='background:#f9f4ed;border:2px solid #dcd3c4;border-radius:16px;padding:8px 12px;margin-bottom:8px;justify-content:space-between';
        var info=document.createElement('div');info.style.cssText='display:flex;flex-direction:column;gap:2px';
        var nm=document.createElement('b');nm.textContent=c.by||'—';
-       var pth=document.createElement('span');pth.className='who';pth.textContent=String(c.path||'').split(' / ').slice(-2).join(' ← ')+' — '+String(c.at||'').slice(0,10);
+       var pth=document.createElement('span');pth.className='who';pth.textContent=String(c.path||'').split(' / ').slice(-2).join(' ← ')+' — '+String(c.at||'').slice(0,10);var iv=tgInvited[String(c.phone).replace(/\D/g,'')];if(iv&&iv.at)pth.textContent+=' — آخر دعوة: '+String(iv.at).slice(0,10);
        info.appendChild(nm);info.appendChild(pth);
        var tel=String(c.phone).replace(/[^0-9+]/g,'');
        var wa=tel.replace(/^\+/,'').replace(/^0/,'964');
@@ -607,10 +607,6 @@ function loadPrivate(){
        links.children[1].removeAttribute('href');links.children[1].removeAttribute('target');var wb=links.children[1].firstChild;var inv2=tgInvited[String(c.phone).replace(/\D/g,'')];wb.textContent=inv2?'دُعي ✓ — إعادة':'تأكيد ودعوة';wb.onclick=function(ev){ev.preventDefault();tgInvite(c,wb)};
        var del=document.createElement('button');del.className='warn';del.textContent='حذف';
        del.onclick=function(){if(!confirm('حذف رقم '+(c.by||'')+'؟'))return;fetch(PRIV,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:K(),action:'delete',id:c.id})}).then(loadPrivate)};
-       var inv=document.createElement('button');inv.type='button';inv.className='ok';
-       inv.textContent=tgInvited[String(c.phone).replace(/\D/g,'')]?'دُعي ✓ — إعادة':'تأكيد ودعوة';
-       inv.onclick=function(){tgInvite(c,inv)};
-       links.appendChild(inv);
        links.appendChild(del);
        d.appendChild(info);d.appendChild(links);box.appendChild(d);
      });
