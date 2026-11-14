@@ -505,18 +505,14 @@ $('tgPost').onclick=function(){
   tgCall({action:'post',text:t}).then(function(j){$('tgStatus').textContent=j&&j.ok?'نُشر في المجموعة ✓':'تعذّر النشر: '+((j&&j.reason)||'');if(j&&j.ok)$('tgText').value=''});
 };
 function tgInvite(c,btn){
-  btn.disabled=true;btn.textContent='جارٍ إنشاء الدعوة…';
-  var w=window.open('','_blank');
-  tgCall({action:'invite',name:c.by||'',phone:c.phone}).then(function(j){
-    btn.disabled=false;
-    if(!j||!j.ok){btn.textContent='تأكيد ودعوة';if(w)w.close();alert('تعذّر: '+((j&&j.reason)||'خطأ'));return}
-    var tel=String(c.phone).replace(/[^0-9+]/g,'').replace(/^\+/,'').replace(/^0/,'964');
-    var msg='السلام عليكم '+(c.by||'')+'\nمعك اكرم علي لازم الفاضل.\nتم التأكد من معلوماتك في شجرة عشائر الحمودي، شكرًا لمشاركتك.\nهذا رابط انضمامك إلى مجموعة «ديوان الحمودي» على تلقرام (خاص بك، صالح ٧ أيام):\n'+j.link;
-    var url='https://wa.me/'+tel+'?text='+encodeURIComponent(msg);
-    if(w)w.location=url;else location.href=url;
-    tgInvited[String(c.phone).replace(/\D/g,'')]={at:new Date().toISOString()};
-    btn.textContent='دُعي ✓ — إعادة';
-  }).catch(function(){btn.disabled=false;btn.textContent='تأكيد ودعوة';if(w)w.close()});
+  var tel=String(c.phone).replace(/[^0-9+]/g,'').replace(/^\+/,'').replace(/^0/,'964');
+  var msg=INVITE_MSG(c.by||'');
+  window.open('https://wa.me/'+tel+'?text='+encodeURIComponent(msg),'_blank');
+  tgInvited[String(c.phone).replace(/\D/g,'')]={at:new Date().toISOString()};
+  btn.textContent='دُعي ✓ — إعادة';
+}
+function INVITE_MSG(name){
+  return 'السلام عليكم ورحمة الله وبركاته'+(name?' '+name:'')+'\nمعك أكرم علي لازم الفاضل.\nنعمل على جمع شجرة عشائر الحمودي كاملة، حتى نحفظ أنسابنا ونتعرف على بعضنا ونبقى على تواصل.\nوأنشأنا مجموعة «ديوان الحمودي» على تلقرام، وفيها خدمات للعشيرة: طلب المساعدة العاجلة، وإبلاغ الأقارب عند السفر إلى مدينتهم، وتذكير بالمناسبات.\nللانضمام اضغط هذا الرابط، وسيرحّب بك المساعد الذكي ويسألك عن اسمك ونسبك وعائلتك، وبعد المراجعة يصلك رابط المجموعة: https://t.me/alhamoudi_tree_bot?start=join\nوتستطيع تصفّح الشجرة من هنا: https://alhamoudi-family.github.io\nمعلوماتك الخاصة مثل الرقم والسكن لا يراها أحد غيري.\nإذا لم يكن تطبيق تلقرام عندك، فحمّله أولًا ثم اضغط الرابط.\nمع التحية.';
 }
 
 function loadSvc(){
