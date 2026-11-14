@@ -151,6 +151,12 @@ function home(){
   var mp=el('a','btn','');mp.href='map.html';mp.style.cssText='background:#7a8a5e;border-color:#5f6d47;color:#f5f8ee;text-decoration:none;justify-content:center';
   mp.appendChild(el('span',null,'تصفّح الشجرة'));var ms=el('small',null,'خريطة تفاعلية • صلة القرابة • المروحة');ms.style.color='#f5f8ee';mp.appendChild(ms);
   app.appendChild(mp);
+  var jb=el('a','btn main','');jb.href='https://t.me/alhamoudi_tree_bot?start=join';jb.target='_blank';jb.rel='noopener';jb.style.cssText='text-decoration:none;flex-direction:column;gap:2px';
+  jb.appendChild(el('span',null,'🌿 انضم إلى ديوان الحمودي'));var js=el('small',null,'تحدّث مع المساعد الذكي على تلقرام');js.style.color='#fff2eb';jb.appendChild(js);
+  app.appendChild(jb);
+  var ab=el('a','btn sage','');ab.href='https://t.me/alhamoudi_tree_bot?start=add';ab.target='_blank';ab.rel='noopener';ab.style.cssText='text-decoration:none';
+  ab.appendChild(el('span',null,'أضف اسمًا أو معلومة عبر المساعد'));ab.appendChild(el('small',null,'صور • رسائل صوتية • تصحيح'));
+  app.appendChild(ab);
 
   var sb=el('div','box white');
   sb.appendChild(el('label',null,'ابحث عن اسمك'));
