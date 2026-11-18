@@ -432,7 +432,7 @@ function submit(r,msg,b){
   var phone=v('fPhone');
   if(!by){msg.textContent='اكتب اسمك';return}
   if(phone.replace(/\D/g,'').length<8){msg.textContent='اكتب رقم هاتفك';return}
-  var p={path:r.path,by:by,note:''};
+  var p={path:r.path,by:by,note:'',myPhone:phone};
   var anc=[r.name].concat(r.chain.slice().reverse());
   if(form==='kids'){
     var out=[],seen={};
@@ -461,7 +461,7 @@ function submit(r,msg,b){
   msg.textContent='';b.disabled=true;b.firstChild.textContent='جارٍ الإرسال…';
   fetch(PRIV_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({by:by,path:r.path,phone:phone})}).catch(function(){});
   fetch(HOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)})
-    .then(function(res){if(!res.ok)throw 0;sent=true;form=null;kids=[{name:'',kids:[]}];render()})
+    .then(function(res){return res.json().catch(function(){return {}}).then(function(j){if(!res.ok)throw 0;if(j&&j.ok===false){b.disabled=false;b.firstChild.textContent='إرسال';msg.textContent=j.message||'لا يحق لك النشر قبل توثيقك من الحاج علي لازم';return}sent=true;form=null;kids=[{name:'',kids:[]}];render()})})
     .catch(function(){b.disabled=false;b.firstChild.textContent='إرسال';msg.textContent='لم يُرسل — تأكد من الإنترنت وحاول مرة أخرى'});
 }
 
