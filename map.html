@@ -198,7 +198,7 @@ function layout(){
     r.x=Math.max(start-r.sw+r.w/2,Math.min(start-r.w/2,m));
   })(ROOT,0);
   if(!ROOT.open)return;
-  var main=ROOT.kids.slice().sort(function(a,b){return b.desc-a.desc})[0];
+  var main=null;
   if(main){ROOT.x=main.x;var lx=main.x-main.w/2-SGAP*3,rx=main.x+main.w/2+SGAP*3,side=0;
     ROOT.kids.forEach(function(k){if(k===main||(k.open&&k.kids.length))return;
       if(side++%2===0){k.x=lx-k.w/2;lx-=k.w+SGAP*3}else{k.x=rx+k.w/2;rx+=k.w+SGAP*3}});}
