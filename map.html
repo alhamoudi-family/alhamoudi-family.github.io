@@ -87,9 +87,32 @@
   .hint{position:fixed;right:50%;transform:translateX(50%);bottom:22px;padding:10px 18px;border-radius:999px;background:#201e1d;color:#f5ead8;font-size:14px;font-weight:700;z-index:4;transition:opacity .6s;white-space:nowrap}
   .load{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#645c50}
   @media(max-width:640px){
-    .brand b{display:none}.brand{padding:8px 14px}
-    .sheet{right:8px;left:8px;width:auto;bottom:8px}
-    .ctl{bottom:auto;top:76px;left:12px}
+    .brand b{display:none}.brand{padding:6px 12px;min-height:44px}
+    .top-ui{top:8px;right:8px;left:8px;gap:8px}
+    .sbox{max-width:none}
+    .sbox input{min-height:44px;padding:8px 16px;font-size:16px}
+    .sug{top:50px}
+    .modes{order:3;flex:0 0 100%;flex-wrap:nowrap;overflow-x:auto;gap:6px;padding:2px 2px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+    .modes::-webkit-scrollbar{display:none}
+    .modes a,.modes button{flex:0 0 auto;min-height:38px;padding:6px 14px;font-size:14px;box-shadow:0 2px 8px rgba(46,43,37,.1)}
+    .ctl{top:auto;bottom:10px;left:8px;flex-direction:row;gap:6px}
+    .ctl button{width:42px;height:42px;font-size:20px;box-shadow:0 2px 8px rgba(46,43,37,.12)}
+    .ctl .txt{width:auto;padding:0 12px;font-size:13px}
+    .ctl svg{width:18px;height:18px}
+    .hint{bottom:62px;white-space:normal;text-align:center;width:max-content;max-width:calc(100% - 24px);font-size:13px;line-height:1.6}
+    .sheet{right:6px;left:6px;width:auto;bottom:6px;padding:14px 14px 12px;gap:8px;border-radius:22px;max-height:62vh;overflow:auto}
+    .sheet h2{font-size:24px;padding-left:40px}
+    .sheet .chain{font-size:14px;line-height:1.7}
+    .sheet .meta span{font-size:12px;padding:3px 10px}
+    .sheet .acts{gap:6px}
+    .sheet .acts a,.sheet .acts button{min-height:40px;padding:6px 14px;font-size:14px}
+    .sheet .x{top:6px;left:6px}
+    .slot{flex-basis:120px;min-height:46px;font-size:15px}
+    .relres{font-size:15px;line-height:1.75}
+    .cap{bottom:116px;padding:8px 18px;min-width:0}
+    .cap b{font-size:22px}
+    .stopbtn{bottom:62px;min-height:44px;font-size:15px}
+    #circ{padding-top:108px}
   }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
@@ -356,7 +379,7 @@ $('zIn').onclick=function(){var k=Math.min(MAXK,T.k*1.6),cx=innerWidth/2,cy=inne
 $('zOut').onclick=function(){var k=Math.max(MINK,T.k/1.6),cx=innerWidth/2,cy=innerHeight/2;fly({k:k,x:cx-(cx-T.x)*k/T.k,y:cy-(cy-T.y)*k/T.k},300)};
 $('zFit').onclick=function(){fly(fitT())};
 $('xAll').onclick=function(){nodes.forEach(function(r){r.open=true});relayout(sel||ROOT);setTimeout(function(){fly(fitT())},20)};
-$('cAll').onclick=function(){nodes.forEach(function(r){r.open=r.depth<2});if(sel)reveal(sel);relayout(ROOT);var k0=innerWidth<640?.6:.75;fly({k:k0,x:innerWidth/2-ROOT.x*k0,y:110-ROOT.y*k0})};
+$('cAll').onclick=function(){nodes.forEach(function(r){r.open=r.depth<2});if(sel)reveal(sel);relayout(ROOT);var k0=innerWidth<640?.6:.75;fly({k:k0,x:innerWidth/2-ROOT.x*k0,y:(innerWidth<640?135:110)-ROOT.y*k0})};
 $('sx').onclick=function(){select(null)};
 $('sKids').onclick=function(){if(sel)showKids(sel)};
 $('sUp').onclick=function(){if(sel&&sel.parent)select(sel.parent,true)};
@@ -562,7 +585,7 @@ Promise.all([fetch(TREE_URL+'?t='+Date.now()).then(function(r){return r.json()})
   if(/^#(fan|bub)$/.test(location.hash))showCirc(location.hash.slice(1));
   var h=location.hash.length>1?decodeURIComponent(location.hash.slice(1)):'';
   if(byPath[h]){var r=byPath[h];select(r,false);setTimeout(function(){centerOn(r,1.2)},80)}
-  else{var k0=innerWidth<640?.6:.75;T={k:k0,x:innerWidth/2-ROOT.x*k0,y:110-ROOT.y*k0};apply();}
+  else{var k0=innerWidth<640?.6:.75;T={k:k0,x:innerWidth/2-ROOT.x*k0,y:(innerWidth<640?135:110)-ROOT.y*k0};apply();}
 }).catch(function(){$('load').textContent='تعذّر تحميل الشجرة — تأكد من الاتصال'});
 addEventListener('resize',function(){if(!sel)apply()});
 </script>
