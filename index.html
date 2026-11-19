@@ -57,6 +57,15 @@
   ::placeholder{color:#a8a092;opacity:1}
   img.photo{width:120px;height:120px;object-fit:cover;border-radius:999px;border:3px solid #dcd3c4}
   .hidden{display:none!important}
+  @media(max-width:520px){
+    .page{padding:14px 12px 40px;gap:14px}
+    .big{font-size:34px}
+    .box{padding:14px;border-radius:20px}
+    .btn{min-height:52px;padding:10px 16px;font-size:18px;border-radius:18px}
+    .btn:not(.main):not(.center){flex-direction:column;align-items:flex-start;justify-content:center;gap:0}
+    .btn small{font-size:13px;white-space:normal}
+    .top .btn{min-height:46px;font-size:16px}
+  }
 </style>
 </head>
 <body>
