@@ -146,6 +146,7 @@ function home(){
   head.appendChild(el('div','muted','قبيلة بني مالك — آل إبراهيم'));
   head.appendChild(el('h1','big','شجرة عشائر الحمودي'));
   app.appendChild(head);
+  var stp=el('div','box');stp.style.cssText='background:#fff7e8;border-color:#e2c48f;text-align:center;gap:6px';stp.appendChild(el('div',null,'بطلب من مشايخ عشائر الحمودي توقّف العمل على الشجرة لبقية العشائر حرصًا على وحدة أبنائها، وتُعرض الآن عشيرة الفاضل وحدها.'));app.appendChild(stp);
 
   (PUB.alerts||[]).filter(function(a){return a.type==='sos'}).forEach(function(a){
     var al=el('div','box');al.style.cssText='background:#8c491a;border-color:#6f3712;color:#fff2eb;gap:6px';
@@ -474,8 +475,9 @@ function submit(r,msg,b){
     .catch(function(){b.disabled=false;b.firstChild.textContent='إرسال';msg.textContent='لم يُرسل — تأكد من الإنترنت وحاول مرة أخرى'});
 }
 
+function onlyFadhil(t){if(t&&t.kids)t.kids=t.kids.filter(function(k){return k.name==='عشيرة الفاضل'});return t}
 fetch(TREE_URL+'?t='+Date.now()).then(function(r){return r.json()}).then(function(t){
-  build(t);
+  build(onlyFadhil(t));
   var h='';try{h=decodeURIComponent(location.hash.slice(1))}catch(e){}
   if(byId[h])h=byId[h].path;
   sel=byPath[h]?h:ROOT.path;
