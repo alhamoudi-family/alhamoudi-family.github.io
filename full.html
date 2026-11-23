@@ -213,7 +213,7 @@
     </div>
   </div>
 
-  <p class="foot">كل ملاحظة أو تصحيح يُرسل للمراجعة أولًا، ويظهر للعائلة بعد الموافقة. زر «نسخ الرابط» ينسخ رابطًا يفتح الشجرة على الشخص المختار مباشرة. حمولة الفاضل مكتملة؛ وحمولات البكر والخشاب والموسى تُبنى بمشاركتكم.</p>
+  <p class="foot">كل ملاحظة أو تصحيح يُرسل للمراجعة أولًا، ويظهر للعائلة بعد الموافقة. زر «نسخ الرابط» ينسخ رابطًا يفتح الشجرة على الشخص المختار مباشرة. تُعرض الآن عشيرة الفاضل وحدها بطلب من مشايخ عشائر الحمودي.</p>
   <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
     <span style="height:2px;flex:0 0 40px;background:#dcd3c4"></span>
     <span style="font-size:14px;font-weight:800;color:#8c491a;white-space:nowrap">إعداد الشجرة: علي لازم صخي</span>
@@ -791,9 +791,10 @@ $('bAddKid').onclick=function(){kidsDraft.push({name:'',kids:[]});drawKids(byPat
 window.addEventListener('resize',function(){if(ROOT)render()});
 window.addEventListener('orientationchange',function(){if(ROOT)render()});
 
+function onlyFadhil(t){if(t&&t.kids)t.kids=t.kids.filter(function(k){return k.name==='عشيرة الفاضل'});return t}
 fetch(TREE_URL+'?t='+Date.now()).then(function(r){return r.ok?r.json():null}).then(function(t){
   if(!t||!t.name)throw 0;
-  build(t);
+  build(onlyFadhil(t));
   sel=ROOT.path;
   if(location.hash.length>1){try{var h=decodeURIComponent(location.hash.slice(1));if(byPath[h])sel=h}catch(e){}}
   index.forEach(function(r){if(r.depth<4&&r.kids.length)open[r.path]=1});
