@@ -580,8 +580,9 @@ $('q').addEventListener('keydown',function(e){if(e.key==='Enter'){var b=$('sug')
 document.addEventListener('keydown',function(e){if(e.target.tagName==='INPUT')return;if(e.key==='+'||e.key==='=')$('zIn').click();if(e.key==='-')$('zOut').click();if(e.key==='0')$('zFit').click();if(e.key==='Escape')select(null)});
 
 setTimeout(function(){$('hint').style.opacity=0},5000);
+function onlyFadhil(t){if(t&&t.kids)t.kids=t.kids.filter(function(k){return k.name==='عشيرة الفاضل'});return t}
 Promise.all([fetch(TREE_URL+'?t='+Date.now()).then(function(r){return r.json()}),document.fonts.ready]).then(function(v){
-  build(v[0]);DATA=v[0];layout();draw();$('load').remove();
+  v[0]=onlyFadhil(v[0]);build(v[0]);DATA=v[0];layout();draw();$('load').remove();
   if(/^#(fan|bub)$/.test(location.hash))showCirc(location.hash.slice(1));
   var h=location.hash.length>1?decodeURIComponent(location.hash.slice(1)):'';
   if(byPath[h]){var r=byPath[h];select(r,false);setTimeout(function(){centerOn(r,1.2)},80)}
