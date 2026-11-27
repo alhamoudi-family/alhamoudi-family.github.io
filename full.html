@@ -791,7 +791,8 @@ $('bAddKid').onclick=function(){kidsDraft.push({name:'',kids:[]});drawKids(byPat
 window.addEventListener('resize',function(){if(ROOT)render()});
 window.addEventListener('orientationchange',function(){if(ROOT)render()});
 
-function onlyFadhil(t){if(t&&t.kids)t.kids=t.kids.filter(function(k){return k.name==='عشيرة الفاضل'});return t}
+var ALLV=(function(){var K=/[?&]all=hm-abuakram-26(&|$)/.test(location.search);try{if(K)localStorage.setItem('ft-all','1');if(/[?&]all=off(&|$)/.test(location.search))localStorage.removeItem('ft-all');return K||localStorage.getItem('ft-all')==='1'}catch(e){return K}})();
+function onlyFadhil(t){if(ALLV)return t;if(t&&t.kids)t.kids=t.kids.filter(function(k){return k.name==='عشيرة الفاضل'});return t}
 fetch(TREE_URL+'?t='+Date.now()).then(function(r){return r.ok?r.json():null}).then(function(t){
   if(!t||!t.name)throw 0;
   build(onlyFadhil(t));
